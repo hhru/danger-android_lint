@@ -29,7 +29,8 @@ module Danger
   #
   class DangerAndroidLint < Plugin
 
-    SEVERITY_LEVELS = ["Warning", "Error", "Fatal"]
+    SEVERITY_LEVELS = %w[Warning Error Fatal]
+    CUSTOM_LINT_RULES = %w[UseAttrColor]
 
     # Location of lint report file
     # If your Android lint task outputs to a different location, you can specify it here.
@@ -86,6 +87,9 @@ module Danger
 
     # Only shows messages for the modified lines.
     attr_accessor :filtering_lines
+
+    # Show issue id
+    attr_accessor :show_issue_id
 
     # Calls lint task of your gradle project.
     # It fails if `gradlew` cannot be found inside current directory.
@@ -204,8 +208,18 @@ module Danger
             added_lines = parseDiff(git.diff[filename].patch)
             next unless added_lines.include? line
           end
-          send(level === "Warning" ? "warn" : "fail", r.get('message'), file: filename, line: line)
+          send(level === "Warning" ? "warn" : "fail", get_message(r), file: filename, line: line)
         end
+      end
+    end
+
+    def get_message(issue)
+      if show_issue_id
+        issue_id = issue.get("id")
+        id_description = issue_id in CUSTOM_LINT_RULES ? "#{issue_id}" : "[#{issue_id}](http://googlesamples.github.io/android-custom-lint-rules/checks/#{issue.id}.md.html)"
+        "#{id_description}: #{issue.get("message")}"
+      else
+        issue.get("message")
       end
     end
 
