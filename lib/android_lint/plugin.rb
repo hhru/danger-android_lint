@@ -91,6 +91,9 @@ module Danger
     # Show issue id
     attr_accessor :show_issue_id
 
+    # Fail if report file contains any issues
+    attr_accessor :fail_on_issues
+
     # Calls lint task of your gradle project.
     # It fails if `gradlew` cannot be found inside current directory.
     # It fails if `severity` level is not a valid option.
@@ -211,6 +214,7 @@ module Danger
           send(level === "Warning" ? "warn" : "fail", get_message(r), file: filename, line: line)
         end
       end
+      fail 'Android Lint has found some issues' if fail_on_issues
     end
 
     def get_message(issue)
