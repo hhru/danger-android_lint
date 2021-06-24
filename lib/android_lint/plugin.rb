@@ -30,7 +30,7 @@ module Danger
   class DangerAndroidLint < Plugin
 
     SEVERITY_LEVELS = %w[Warning Error Fatal]
-    CUSTOM_LINT_RULES = %w[UseAttrColor]
+    CUSTOM_LINT_RULES = %w[UseAttrColor LogNotTimber]
 
     # Location of lint report file
     # If your Android lint task outputs to a different location, you can specify it here.
@@ -213,8 +213,8 @@ module Danger
           end
           send(level === "Warning" ? "warn" : "fail", get_message(r), file: filename, line: line)
         end
+        fail 'Android Lint has found some issues' if fail_on_issues
       end
-      fail 'Android Lint has found some issues' if fail_on_issues
     end
 
     def get_message(issue)
