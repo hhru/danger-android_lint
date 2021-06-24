@@ -216,11 +216,15 @@ module Danger
     def get_message(issue)
       if show_issue_id
         issue_id = issue.get("id")
-        id_description = issue_id in CUSTOM_LINT_RULES ? "#{issue_id}" : "[#{issue_id}](http://googlesamples.github.io/android-custom-lint-rules/checks/#{issue.id}.md.html)"
+        id_description = CUSTOM_LINT_RULES.include?(issue_id) ? "#{issue_id}" : google_lint_issue_description(issue_id)
         "#{id_description}: #{issue.get("message")}"
       else
         issue.get("message")
       end
+    end
+
+    def google_lint_issue_description(issue_id)
+      "[#{issue_id}](http://googlesamples.github.io/android-custom-lint-rules/checks/#{issue_id}.md.html)"
     end
 
     # parses git diff of a file and retuns an array of added line numbers.
