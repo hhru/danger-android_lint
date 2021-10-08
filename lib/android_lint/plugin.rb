@@ -31,6 +31,7 @@ module Danger
 
     SEVERITY_LEVELS = %w[Warning Error Fatal]
     CUSTOM_LINT_RULES = %w[UseAttrColor LogNotTimber]
+    REMOTE_CALL_PLUGIN_PORT = "8091"
 
     # Location of lint report file
     # If your Android lint task outputs to a different location, you can specify it here.
