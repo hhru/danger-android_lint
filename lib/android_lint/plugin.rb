@@ -211,17 +211,25 @@ module Danger
             added_lines = parseDiff(git.diff[filename].patch)
             next unless added_lines.include? line
           end
-          send(level === "Warning" ? "warn" : "fail", get_message(r), file: filename, line: line)
+          send(level === "Warning" ? "warn" : "fail", get_message(r, filename, line), file: filename, line: line)
         end
         fail 'Android Lint has found some issues' if fail_on_issues
       end
     end
 
-    def get_message(issue)
+    def get_message(issue, filename, line)
       if show_issue_id
         issue_id = issue.get("id")
         id_description = CUSTOM_LINT_RULES.include?(issue_id) ? "#{issue_id}" : google_lint_issue_description(issue_id)
-        "#{id_description}: #{issue.get("message")}"
+
+        # Special format of string for creating code block in Github with 'Copy' button.
+        file_path = """
+
+        #{filename}:#{line}
+
+        """
+        open_link = "[Open in Android Studio](http://localhost:#{REMOTE_CALL_PLUGIN_PORT}?message=#{filename}:#{line})"
+        "#{id_description}: #{issue.get("message")} \n\n**Scroll to copy file name**\n#{file_path}\n\n#{open_link}"
       else
         issue.get("message")
       end
