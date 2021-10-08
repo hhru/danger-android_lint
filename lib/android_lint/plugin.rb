@@ -224,11 +224,7 @@ module Danger
         id_description = CUSTOM_LINT_RULES.include?(issue_id) ? "#{issue_id}" : google_lint_issue_description(issue_id)
 
         # Special format of string for creating code block in Github with 'Copy' button.
-        file_path = """
-
-        #{filename}:#{line}
-
-        """
+        file_path = """\n```\n#{filename}:#{line}\n```\n"""
         open_link = "[Open in Android Studio](http://localhost:#{REMOTE_CALL_PLUGIN_PORT}?message=#{filename}:#{line})"
         "#{id_description}: #{issue.get("message")} \n\n**Scroll to copy file name**\n#{file_path}\n\n#{open_link}"
       else
