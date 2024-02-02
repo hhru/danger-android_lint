@@ -31,7 +31,7 @@ module Danger
 
     SEVERITY_LEVELS = %w[Warning Error Fatal]
     CUSTOM_LINT_RULES = %w[UseAttrColor LogNotTimber]
-    REMOTE_CALL_PLUGIN_PORT = "8091"
+    IDE_REMOTE_CONTROL_PLUGIN_PORT = "63342"
 
     # Location of lint report file
     # If your Android lint task outputs to a different location, you can specify it here.
@@ -225,7 +225,7 @@ module Danger
 
         # Special format of string for creating code block in Github with 'Copy' button.
         file_path = """\n```\n#{filename}:#{line}\n```\n"""
-        open_link = "[Open in Android Studio](http://localhost:#{REMOTE_CALL_PLUGIN_PORT}?message=#{filename}:#{line})"
+        open_link = "[Open in Android Studio](http://localhost:#{IDE_REMOTE_CONTROL_PLUGIN_PORT}/api/file/#{filename}:#{line})"
         "#{id_description}: #{issue.get("message")} \n\n**Scroll to copy file name**\n#{file_path}\n\n#{open_link}"
       else
         issue.get("message")
