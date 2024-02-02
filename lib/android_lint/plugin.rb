@@ -30,7 +30,14 @@ module Danger
   class DangerAndroidLint < Plugin
 
     SEVERITY_LEVELS = %w[Warning Error Fatal]
-    CUSTOM_LINT_RULES = %w[UseAttrColor LogNotTimber]
+    CUSTOM_LINT_RULES = %w[
+      UseAttrColor
+      ConstraintLayoutMatchParentUsage
+      ScreenAnalyticsForbiddenObject
+      UnsecureWebViewUsage
+      WhenExpressionObjectsTypeCheck
+      WholeModelIsSerializable
+    ]
     IDE_REMOTE_CONTROL_PLUGIN_PORT = "63342"
 
     # Location of lint report file
@@ -225,7 +232,12 @@ module Danger
 
         # Special format of string for creating code block in Github with 'Copy' button.
         file_path = """\n```\n#{filename}:#{line}\n```\n"""
+
+        # Отказались от поддержки Open in Android Studio, так как запускаем Android Lint в контексте отдельных модулей
+        # В таком случае пути в отчете линта строятся не от корня проекта, а от корня модуля, 
+        # что не дает их открыть в AS по ссылке
         open_link = "[Open in Android Studio](http://localhost:#{IDE_REMOTE_CONTROL_PLUGIN_PORT}/api/file/#{filename}:#{line})"
+
         "#{id_description}: #{issue.get("message")} \n\n**Scroll to copy file name**\n#{file_path}\n\n#{open_link}"
       else
         issue.get("message")
