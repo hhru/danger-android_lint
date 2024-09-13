@@ -238,7 +238,7 @@ module Danger
         # что не дает их открыть в AS по ссылке
         open_link = "[Open in Android Studio](http://localhost:#{IDE_REMOTE_CONTROL_PLUGIN_PORT}/api/file/#{filename}:#{line})"
 
-        "#{id_description}: #{issue.get("message")} \n\n**Scroll to copy file name**\n#{file_path}"
+        "#{id_description}: #{issue.get("message")}"
       else
         issue.get("message")
       end
